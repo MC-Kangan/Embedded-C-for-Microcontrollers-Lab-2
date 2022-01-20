@@ -9,16 +9,21 @@
 
 void main(void) 
 {
-	unsigned int count=0;
+	// setup pin for input (connected to button1 - RF2)
+    TRISFbits.TRISF2=1; //set TRIS value for pin (input)
+    ANSELFbits.ANSELF2=0; //turn off analogue input on pin
+    
+    unsigned int count=0;
     LEDarray_init();
-    int arr[] = { 0,1,2,4,8,16,32,64,128,64,32,16,8,4,2,1 };//create an array that contains the number that could lit up the LED
+    
     while (1) {
-		count++; // increment count 
-        // Calculate length of the array (Number of elements): length of array =  size of array / size of any one element
-        int Length  = sizeof(arr)/sizeof(arr[0]);
-		if (count >Length-1) {count=0;} //Reset when count > the length of the array; Length - 1 cuz it counts from 0
-        LEDarray_disp_bin(arr[count]); // Output a on the LED array in binary
+        while (PORTFbits.RF2); // While the button is not pressed, trap in the loop
+        if (!PORTFbits.RF2){ // If the button 1 is pressed, count+1
+            ++count; // increment count 
+            if (count >255) {count=0;} //Reset when count gets too large 255 = 0b11111111
+            LEDarray_disp_bin(count); // Output a on the LED array in binary
+        }
         
-		__delay_ms(50); // Delay so human eye can see change
+		__delay_ms(100); // Delay so human eye can see change. Increase to 100 to cleaner effect
     }
 }
