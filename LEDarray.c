@@ -6,9 +6,9 @@
 / Function used to initialise pins to drive the LEDarray
 ************************************/
 void LEDarray_init(void)
-{
-    	//set up TRIS registers for pins connected to LED array
+{   //set up TRIS registers for pins connected to LED array
 	//set initial output LAT values (they may have random values when powered on)
+   
 }
 
 /************************************
@@ -20,6 +20,8 @@ void LEDarray_disp_bin(unsigned int number)
 	//some code to turn on/off the pins connected to the LED array
 	//if statements and bit masks can be used to determine if a particular pin should be on/off
 	//see Readme.md for examples
+
+    
 }
 
 /************************************
