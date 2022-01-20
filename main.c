@@ -24,6 +24,6 @@ void main(void)
             LEDarray_disp_bin(count); // Output a on the LED array in binary
         }
         
-		__delay_ms(100); // Delay so human eye can see change. Increase to 100 to cleaner effect
+		__delay_ms(500); // Delay so human eye can see change. Increase to 100 to cleaner effect
     }
 }
