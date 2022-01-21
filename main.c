@@ -19,7 +19,7 @@ void main(void)
     ADC_init(); // Defined in ADC.c
     
     while (1) {
-        LEDarray_disp_bin(ADC_getval()); // Output a on the LED array in binary
+        LEDarray_disp_dec(ADC_getval()); // Output a on the LED array in binary
 		__delay_ms(50); // Delay so human eye can see change. 
     }
 }
