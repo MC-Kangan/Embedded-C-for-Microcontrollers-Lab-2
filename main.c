@@ -4,6 +4,7 @@
 
 #include <xc.h>
 #include "LEDarray.h"
+#include "ADC.h" // Include header file
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
@@ -14,16 +15,11 @@ void main(void)
     ANSELFbits.ANSELF2=0; //turn off analogue input on pin
     
     unsigned int count=0;
-    LEDarray_init();
+    LEDarray_init(); // Defined in LEDarray.c
+    ADC_init(); // Defined in ADC.c
     
     while (1) {
-        while (PORTFbits.RF2); // While the button is not pressed, trap in the loop
-        if (!PORTFbits.RF2){ // If the button 1 is pressed, count+1
-            ++count; // increment count 
-            if (count >255) {count=0;} //Reset when count gets too large 255 = 0b11111111
-            LEDarray_disp_bin(count); // Output a on the LED array in binary
-        }
-        
-		__delay_ms(500); // Delay so human eye can see change. Increase to 100 to cleaner effect
+        LEDarray_disp_bin(ADC_getval()); // Output a on the LED array in binary
+		__delay_ms(50); // Delay so human eye can see change. 
     }
 }
