@@ -96,30 +96,32 @@ void LEDarray_disp_PPM(unsigned int cur_val, unsigned int max)
 	unsigned int disp_val;
 	unsigned int corr;
     disp_val = 0; // Initialize disp_val
-    corr = 0; // Correction factor, adjust this number according to thee room environment. When room is bright, increase corr, vice versa.
+    corr = 20; // Correction factor, adjust this number according to thee room environment. When room is bright, increase corr, vice versa.
     
     // Display cur_val on LED
-    if (cur_val > 9+corr) { disp_val += 1;} // if count>9 display number +1
-    if (cur_val > 19+corr) { disp_val += 2;} // if count>19 display number +2
-    if (cur_val > 29+corr) { disp_val += 4;} // if count>19 display number +4
-    if (cur_val > 39+corr) { disp_val += 8;} // if count>19 display number +8
-    if (cur_val > 49+corr) { disp_val += 16;} // if count>19 display number +16
-    if (cur_val > 59+corr) { disp_val += 32;} // if count>19 display number +32
-    if (cur_val > 69+corr) { disp_val += 64;} // if count>19 display number +64
-    if (cur_val > 79+corr) { disp_val += 128;} // if count>19 display number +128
+    // If disp_val = 1, show 1 LED; disp_val = 1 + 2 = 3, show 2 LED; etc.
+    if (cur_val > 9+corr) { disp_val += 1;} // if cur_val> 9+corr display number +1
+    if (cur_val > 19+corr) { disp_val += 2;} // if cur_val> 19+corr display number +2
+    if (cur_val > 29+corr) { disp_val += 4;} // if cur_val> 29+corr display number +4
+    if (cur_val > 39+corr) { disp_val += 8;} // if cur_val> 39+corr display number +8
+    if (cur_val > 49+corr) { disp_val += 16;} // if cur_val> 49+corr display number +16
+    if (cur_val > 59+corr) { disp_val += 32;} // if cur_val> 59+corr display number +32
+    if (cur_val > 69+corr) { disp_val += 64;} // if cur_val> 69+corr display number +64
+    if (cur_val > 79+corr) { disp_val += 128;} // if cur_val> 79+corr display number +128
     
     // If cur_val > = max, display cur_val on LED
     if (cur_val >= max) { 
         LEDarray_disp_bin(disp_val);} 
-    else {
-        if (max > 0+corr && max <=9+corr){ disp_val += 1;} // if count>9 display number +1
-        if (max > 9+corr && max <=19+corr) { disp_val += 2;} // if count>19 display number +2
-        if (max > 19+corr && max <=29+corr) { disp_val += 4;} // if count>19 display number +4
-        if (max > 29+corr && max <=39+corr) { disp_val += 8;} // if count>19 display number +8
-        if (max > 39+corr && max <=49+corr) { disp_val += 16;} // if count>19 display number +16
-        if (max > 49+corr && max <=59+corr) { disp_val += 32;} // if count>19 display number +32
-        if (max > 59+corr && max <=69+corr) { disp_val += 64;} // if count>19 display number +64
-        if (max > 69+corr && max <=79+corr) { disp_val += 128;} // if count>19 display number +128
+    else { // Show individual LED of the maximum, this is done by adding a number (1 or 2 or 4 etc) directly on the disp_val
+        // When the max value lands in the region defined, add specific number 
+        if (max > 0+corr && max <=9+corr){ disp_val += 1;} 
+        if (max > 9+corr && max <=19+corr) { disp_val += 2;} 
+        if (max > 19+corr && max <=29+corr) { disp_val += 4;} 
+        if (max > 29+corr && max <=39+corr) { disp_val += 8;} 
+        if (max > 39+corr && max <=49+corr) { disp_val += 16;} 
+        if (max > 49+corr && max <=59+corr) { disp_val += 32;} 
+        if (max > 59+corr && max <=69+corr) { disp_val += 64;} 
+        if (max > 69+corr && max <=79+corr) { disp_val += 128;} 
         LEDarray_disp_bin(disp_val);
     }
   
