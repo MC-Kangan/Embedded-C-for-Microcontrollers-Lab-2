@@ -16,6 +16,8 @@ void main(void)
     
     unsigned int max=0;
     unsigned int cur_val=0;
+    unsigned int corr;
+    unsigned int limit;
     
     LEDarray_init(); // Defined in LEDarray.c
     ADC_init(); // Defined in ADC.c
@@ -24,14 +26,17 @@ void main(void)
         cur_val = ADC_getval();  // get brightness in digital
         // If cur_val >= max, let cur_val be max
         
-        // Note: Simplistic way of writing this code
+        // Note: Set the upper limit of the code
+        corr = 20;
+        limit = 80 + corr;
+        if (cur_val > limit) {cur_val = limit;}
+        
         if (cur_val >= max){max = cur_val;} else {max -= 10;} // Subtract 10 every 1s in order to decrease 1 led every second
         LEDarray_disp_PPM(cur_val, max);
-       
-         __delay_ms(1000);}
         
         
-
-
+         __delay_ms(1000);
+    }
+        
 
 }
