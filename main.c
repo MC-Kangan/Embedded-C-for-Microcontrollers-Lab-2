@@ -14,12 +14,24 @@ void main(void)
     TRISFbits.TRISF2=1; //set TRIS value for pin (input)
     ANSELFbits.ANSELF2=0; //turn off analogue input on pin
     
-    unsigned int count=0;
+    unsigned int max=0;
+    unsigned int cur_val=0;
+    
     LEDarray_init(); // Defined in LEDarray.c
     ADC_init(); // Defined in ADC.c
-    
+       
     while (1) {
-        LEDarray_disp_dec(ADC_getval()); // Output a on the LED array in binary
-		__delay_ms(50); // Delay so human eye can see change. 
-    }
+        cur_val = ADC_getval();  // get brightness in digital
+        // If cur_val >= max, let cur_val be max
+        
+        // Note: Simplistic way of writing this code
+        if (cur_val >= max){max = cur_val;} else {max -= 10;} // Subtract 10 every 1s in order to decrease 1 led every second
+        LEDarray_disp_PPM(cur_val, max);
+       
+         __delay_ms(1000);}
+        
+        
+
+
+
 }
