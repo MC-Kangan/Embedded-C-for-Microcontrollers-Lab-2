@@ -1,5 +1,6 @@
 #include <xc.h>
 #include "LEDarray.h"
+#include <math.h>
 
 /************************************
 / LEDarray_init
@@ -44,14 +45,14 @@ void LEDarray_disp_bin(unsigned int number)
     
     // If the individual bit in number = the individual bit in the binary mask, return true, otherwise false.
     // Once the LED is on, do not turn it off, therefore, no else statement
-    if (number & 0b00000001) { LATGbits.LATG0=1;} // 0b is the prefix for binary, number = 1
-    if (number & 0b00000010) { LATGbits.LATG1=1;} // 0b is the prefix for binary, number = 2
-    if (number & 0b00000100) { LATAbits.LATA2=1;} // 0b is the prefix for binary, number = 4
-    if (number & 0b00001000) { LATFbits.LATF6=1;} // 0b is the prefix for binary, number = 8
-    if (number & 0b00010000) { LATAbits.LATA4=1;} // 0b is the prefix for binary, number = 16
-    if (number & 0b00100000) { LATAbits.LATA5=1;} // 0b is the prefix for binary, number = 32
-    if (number & 0b01000000) { LATFbits.LATF0=1;} // 0b is the prefix for binary, number = 64
-    if (number & 0b10000000) { LATBbits.LATB0=1;} // 0b is the prefix for binary, number = 128
+    if (number & 0b00000001) { LATGbits.LATG0=1;} else { LATGbits.LATG0=0;} // 0b is the prefix for binary, number = 1
+    if (number & 0b00000010) { LATGbits.LATG1=1;} else { LATGbits.LATG1=0;} // 0b is the prefix for binary, number = 2
+    if (number & 0b00000100) { LATAbits.LATA2=1;} else { LATAbits.LATA2=0;} // 0b is the prefix for binary, number = 4
+    if (number & 0b00001000) { LATFbits.LATF6=1;} else { LATFbits.LATF6=0;} // 0b is the prefix for binary, number = 8
+    if (number & 0b00010000) { LATAbits.LATA4=1;} else { LATAbits.LATA4=0;} // 0b is the prefix for binary, number = 16
+    if (number & 0b00100000) { LATAbits.LATA5=1;} else { LATAbits.LATA5=0;} // 0b is the prefix for binary, number = 32
+    if (number & 0b01000000) { LATFbits.LATF0=1;} else { LATFbits.LATF0=0;} // 0b is the prefix for binary, number = 64
+    if (number & 0b10000000) { LATBbits.LATB0=1;} else { LATBbits.LATB0=0;} // 0b is the prefix for binary, number = 128
     //if (number & 0b00000000) { LATBbits.LATB1=1;} else { LATBbits.LATB1=0;} // This condition will never meet. anything AND 00000000 will produce 0, which will always return false
 
     
@@ -89,11 +90,38 @@ void LEDarray_disp_dec(unsigned int number)
 ************************************/
 void LEDarray_disp_PPM(unsigned int cur_val, unsigned int max)
 {
-	unsigned int disp_val;
-	
-	// some code to format the variable cur_val and max, store in disp_val for display on the LED array
+    // some code to format the variable cur_val and max, store in disp_val for display on the LED array
 	// hint: one method is to manipulate the variables separately and then combine them using the bitwise OR operator
-
-	LEDarray_disp_bin(disp_val);	//display value on LED array
+    
+	unsigned int disp_val;
+	unsigned int corr;
+    disp_val = 0; // Initialize disp_val
+    corr = 0; // Correction factor, adjust this number according to thee room environment. When room is bright, increase corr, vice versa.
+    
+    // Display cur_val on LED
+    if (cur_val > 9+corr) { disp_val += 1;} // if count>9 display number +1
+    if (cur_val > 19+corr) { disp_val += 2;} // if count>19 display number +2
+    if (cur_val > 29+corr) { disp_val += 4;} // if count>19 display number +4
+    if (cur_val > 39+corr) { disp_val += 8;} // if count>19 display number +8
+    if (cur_val > 49+corr) { disp_val += 16;} // if count>19 display number +16
+    if (cur_val > 59+corr) { disp_val += 32;} // if count>19 display number +32
+    if (cur_val > 69+corr) { disp_val += 64;} // if count>19 display number +64
+    if (cur_val > 79+corr) { disp_val += 128;} // if count>19 display number +128
+    
+    // If cur_val > = max, display cur_val on LED
+    if (cur_val >= max) { 
+        LEDarray_disp_bin(disp_val);} 
+    else {
+        if (max > 0+corr && max <=9+corr){ disp_val += 1;} // if count>9 display number +1
+        if (max > 9+corr && max <=19+corr) { disp_val += 2;} // if count>19 display number +2
+        if (max > 19+corr && max <=29+corr) { disp_val += 4;} // if count>19 display number +4
+        if (max > 29+corr && max <=39+corr) { disp_val += 8;} // if count>19 display number +8
+        if (max > 39+corr && max <=49+corr) { disp_val += 16;} // if count>19 display number +16
+        if (max > 49+corr && max <=59+corr) { disp_val += 32;} // if count>19 display number +32
+        if (max > 59+corr && max <=69+corr) { disp_val += 64;} // if count>19 display number +64
+        if (max > 69+corr && max <=79+corr) { disp_val += 128;} // if count>19 display number +128
+        LEDarray_disp_bin(disp_val);
+    }
+  
 }
 
